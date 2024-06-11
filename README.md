@@ -33,7 +33,7 @@ Here's some more info about how this repo works. It's basically just a workflow 
 
 ### The build
 
-The workflow will pull the Qt source code from the `qtwebkit/qtwebkit` github repo. 
+The workflow will pull the Qt source code from the `movableink/webkit` github repo (apparent successor to the `qtwebkit/qtwebkit` repo). 
 We use checkout specific commit hashes so we can get repeatable builds using the same source.
 
 ### Trigger the build
