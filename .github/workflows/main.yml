@@ -89,6 +89,7 @@ jobs:
             libunwind-dev \
             libharfbuzz-dev \
             libwebp-dev \
+            libtasn1-6-dev \
       - name: Install Qt
         run: curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-test/qt-6.7.1-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
       - uses: actions/checkout@v4
