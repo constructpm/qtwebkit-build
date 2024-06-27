@@ -9,11 +9,10 @@ on:
   push:
     tags:
       - v*
-    paths-ignore:
-      - '**/*.md'
 
 env:
-  QTWEBKIT: d1c854e2a214b5fad3c2e9906d6c2ba778d0a245
+  # As of writing this is the latest commit on the qt6-gha branch
+  QTWEBKIT: ee690e4d4f6a38b9c8e61e1e8ec6f538d725ef8c
 
 jobs:
   tar-src:
@@ -27,16 +26,16 @@ jobs:
         run: |
           echo "artefact_name=qtwebkit-${QTWEBKIT:0:7}-src.tar.gz" >> $GITHUB_OUTPUT
           echo "short_version=${QTWEBKIT:0:7}" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          repository: qtwebkit/qtwebkit
+          repository: movableink/webkit
           ref: ${{ env.QTWEBKIT }}
           submodules: true
           path: qtwebkit-src
       - name: Archive
         run: tar --create --xz --file "${{ steps.config.outputs.artefact_name }}" --exclude-vcs qtwebkit-src
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.config.outputs.artefact_name }}"
           path: "${{ github.workspace }}/${{ steps.config.outputs.artefact_name }}"
@@ -48,8 +47,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - os: "ubuntu-18.04"
-            std: "17"
           - os: "ubuntu-22.04"
             std: "17"
 
@@ -90,11 +87,15 @@ jobs:
             libgstreamer-plugins-base1.0-dev \
             libxcomposite-dev \
             libunwind-dev \
+            libharfbuzz-dev \
+            libwebp-dev \
+            libtasn1-6-dev \
+            libwoff-dev \
       - name: Install Qt
-        run: curl -L https://github.com/constructpm/qt-build/releases/download/v5.15.8-lts-lgpl-1/qt-5.15.8-lts-lgpl-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
-      - uses: actions/checkout@v3
+        run: curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1/qt-6.7.1-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
+      - uses: actions/checkout@v4
         with:
-          repository: qtwebkit/qtwebkit
+          repository: movableink/webkit
           ref: ${{ env.QTWEBKIT }}
           submodules: true
       - name: Configure
@@ -105,8 +106,8 @@ jobs:
             -G Ninja \
             -DPORT=Qt \
             -DCMAKE_BUILD_TYPE=Release \
-            -DQt5_DIR=/opt/qt5/lib/cmake/Qt5 \
-            -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/opt/qt5" \
+            -DQt6_DIR=/opt/qt6/lib/cmake/Qt6 \
+            -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/opt/qt6" \
             -DCMAKE_INSTALL_LIBDIR=lib \
             -DKDE_INSTALL_LIBDIR=lib \
             ..
@@ -115,9 +116,9 @@ jobs:
         run: ninja install
       - name: Archive
         working-directory: ${{ github.workspace }}/opt
-        run: tar cJfv "${{ steps.config.outputs.artefact_name }}" qt5
+        run: tar cJfv "${{ steps.config.outputs.artefact_name }}" qt6
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.config.outputs.artefact_name }}"
           path: "${{ github.workspace }}/opt/${{ steps.config.outputs.artefact_name }}"
@@ -156,7 +157,6 @@ jobs:
       matrix:
         config:
           - artefact: qtwebkit-${{ needs.tar-src.outputs.short_version }}-src.tar.gz
-          - artefact: qtwebkit-${{ needs.tar-src.outputs.short_version }}-cpp17-ubuntu-18.04-x64.tar.gz
           - artefact: qtwebkit-${{ needs.tar-src.outputs.short_version }}-cpp17-ubuntu-22.04-x64.tar.gz
     needs:
       - tar-src
@@ -164,7 +164,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "${{ matrix.config.artefact }}"
           path: ./
