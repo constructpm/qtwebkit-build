@@ -1,3 +1,11 @@
+# WARNING
+
+This repo builds an UNOFFICIAL FORK of QtWebkit.
+The original source `qtwebkit/qtwebkit` stopped being maintained.
+The new "maintained" source `movableink/webkit` compiles and crashes on boot.
+Luckily, one other guy hit the [same issue](https://github.com/movableink/webkit/issues/23), and created a PR to [fix it](https://github.com/movableink/webkit/pull/24).
+We are using [this](https://github.com/quarcko/webkit) fork of a fork of a deprecated library this is DISGUSTING.
+
 # Prebuilt Qt Webkit
 
 This project builds the official, unmodified, Qt Webkit source code for C++17 using
