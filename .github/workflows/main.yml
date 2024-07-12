@@ -2,6 +2,7 @@
 name: CI
 
 on:
+  # WARNING: This Repo is PUBLIC. Do NOT USE `pull_request_target`. This could allow anyone to run the github action (information taken from https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories)
   pull_request:
     branches: [main]
     paths-ignore:
@@ -20,7 +21,7 @@ jobs:
       short_version: ${{ steps.config.outputs.short_version }}
 
     name: "Tar source"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest-8-cores"
     steps:
       - id: config
         run: |
@@ -42,7 +43,7 @@ jobs:
 
   build:
     name: "Build ${{ matrix.config.os }}"
-    runs-on: ${{ matrix.config.os }}
+    runs-on: "ubuntu-latest-8-cores"
     strategy:
       fail-fast: false
       matrix:
@@ -92,7 +93,7 @@ jobs:
             libtasn1-6-dev \
             libwoff-dev \
       - name: Install Qt
-        run: curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1/qt-6.7.1-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
+        run: curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-1/qt-6.7.1-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
       - uses: actions/checkout@v4
         with:
           repository: movableink/webkit
