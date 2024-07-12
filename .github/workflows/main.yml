@@ -13,7 +13,7 @@ on:
 
 env:
   # As of writing this is the latest commit on the qt6-gha branch
-  QTWEBKIT: ee690e4d4f6a38b9c8e61e1e8ec6f538d725ef8c
+  QTWEBKIT: f2cfa163e18a2f7be24c4591b5afd8e884cc45ff
 
 jobs:
   tar-src:
@@ -29,7 +29,7 @@ jobs:
           echo "short_version=${QTWEBKIT:0:7}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
         with:
-          repository: movableink/webkit
+          repository: quarcko/webkit
           ref: ${{ env.QTWEBKIT }}
           submodules: true
           path: qtwebkit-src
