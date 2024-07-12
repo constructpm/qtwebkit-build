@@ -106,7 +106,7 @@ jobs:
           cmake \
             -G Ninja \
             -DPORT=Qt \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DQt6_DIR=/opt/qt6/lib/cmake/Qt6 \
             -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/opt/qt6" \
             -DCMAKE_INSTALL_LIBDIR=lib \
