@@ -13,7 +13,7 @@ on:
 
 env:
   # As of writing this is the latest commit on the qt6-gha branch
-  QTWEBKIT: f2cfa163e18a2f7be24c4591b5afd8e884cc45ff
+  QTWEBKIT: e163b06729a14fbcbc115d0b2f3c3920af777100
 
 jobs:
   tar-src:
